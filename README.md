@@ -1,13 +1,18 @@
-# Canal de comunicação interna - CHAT
+<h1 align = "center">
+     Canal de comunicação interna - CHAT
+</h1>
 
-<img src="midia/readme/logocha.png" alt="Bótica Chá da Terra" style="width:600px">
+<p align = "center">
+    <img src="midia/readme/logocha.png" alt="Bótica Chá da Terra" style="width:600px">
+</p>
 
-## Os Colaboradores
-### Kaike Maiante
-<img src="midia/readme/Kaike.png" alt="Kaike" style="width:100px;"/>
+<h2 align = "center">
+    Os Colaboradores
+</h2>
 
-### Pietro Juan
-<img src="midia/readme/Pietro.png" alt="Pietro" style="width:100px;"/>
+<h3 align = "left"> Kaike Maiante <br><br><img src="midia/readme/Kaike.png" alt="Kaike" style="width:100px;"/></h3> 
+
+<h3 align = "left"> Pietro Juan <br><br><img src="midia/readme/Pietro.png" alt="Pietro" style="width:100px;"/></h3>
 
 ### Renan Melo
 <img src="midia/readme/Renan.png" alt="Renan" style="width:100px;"/>
