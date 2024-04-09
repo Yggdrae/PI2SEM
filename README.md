@@ -22,5 +22,5 @@
 ### Victor Nicacio
 <img src="midia/readme/Victor.png" alt="Victor" style="width:100px;"/>
 
-### Yuri Martino
+### Yuri De Martino
 <img src="midia/readme/Yuri.png" alt="Yuri" style="width:100px;"/>
