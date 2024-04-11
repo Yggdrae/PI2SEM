@@ -1,7 +1,8 @@
 body {
-    /*background-color: rgb(199, 230, 255);*/
+    background-color: rgb(192, 223, 255);
 }
 h1 {
-    text-align: center;
-    text-emphasis-color: black;
+    text-align: left;
+    color: black;
+    background: linear-gradient(90deg,rgb(0,127,255),rgb(192,223,255));
 }  
