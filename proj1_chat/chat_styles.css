@@ -1,8 +1,17 @@
 body {
-    background-color: rgb(192, 223, 255);
+    background-color: #1b1b32;
+    max-width: 500px;
+    max-height: 1000px;
+    color: #f5f6f7;
+
 }
+
 h1 {
-    text-align: left;
-    color: black;
+    text-align: center;
+    color: #1b1b32;
     background: linear-gradient(90deg,rgb(0,127,255),rgb(192,223,255));
 }  
+
+input{
+    height: auto;
+}
