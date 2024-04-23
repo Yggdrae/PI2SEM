@@ -8,7 +8,7 @@ const app = express();
 const port = 3000;
 
 // Conectar ao banco de dados SQLite
-const db = new sqlite3.Database('users.sqlite');
+const db = new sqlite3.Database(__dirname + '/users.sqlite');
 
 // Configurar middleware para analisar dados do formulário
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -59,8 +59,8 @@ io.on('connection', (socket) => {
     console.log('A user connected');
 
     // Escuta a mensagem do cliente
-    socket.on('chat message', (data) => {
-        console.log('message: ' + data.username + ': ' + data.message);
+    socket.on('chat message', (data, username) => {
+        console.log('message: ' + username + ': ' + data);
         // Envia a mensagem para todos os clientes conectados
         io.emit('chat message', data);
     });
