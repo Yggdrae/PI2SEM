@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <style>
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #messages li {
+            margin-bottom: 10px;
+            overflow: auto;
+        }
+
+        .message-container {
+            padding: 5px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .other-user .message-container {
+            background-color: #f2f2f2;
+            float: left;
+        }
+
+        .own-message .message-container {
+            background-color: #4caf50;
+            color: white;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+        <input id="input" placeholder="Type your message" autocomplete="off" />
+        <button>Send</button>
+    </form>
+
+    <script src="https://cdn.socket.io/4.1.3/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const username = '<%=username%>'; // Obtém o nome de usuário passado do servidor
+
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value && username) {
+                // Envia a mensagem para o servidor
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        });
+
+        // Escuta as mensagens do servidor
+        socket.on('chat message', function(data) {
+            const item = document.createElement('li');
+            const messageContainer = document.createElement('div');
+            messageContainer.textContent = username + ': ' + data;
+            messageContainer.classList.add('message-container');
+            item.appendChild(messageContainer);
+            item.classList.add('own-message');
+            document.getElementById('messages').appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
+</body>
+</html>
