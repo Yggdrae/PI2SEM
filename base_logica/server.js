@@ -24,13 +24,13 @@ const io = socketIo(server);
 
 // Rota para a página de login
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/public/login.html');
 });
 
 // Rota para autenticar o usuário
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
-
+ww
     // Buscar usuário no banco de dados
     db.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, row) => {
         if (err) {
@@ -59,8 +59,8 @@ io.on('connection', (socket) => {
     console.log('A user connected');
 
     // Escuta a mensagem do cliente
-    socket.on('chat message', (data, username) => {
-        console.log('message: ' + username + ': ' + data);
+    socket.on('chat message', (data) => {
+        console.log('message: ' + data.username + ': ' + data.message);
         // Envia a mensagem para todos os clientes conectados
         io.emit('chat message', data);
     });
