@@ -3,12 +3,14 @@ const http = require('http');
 const socketIo = require('socket.io');
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
+const { DateTime } = require('luxon');
 
 const app = express();
 const port = 3000;
 
 // Conectar ao banco de dados SQLite
 const db = new sqlite3.Database('users.sqlite');
+const hist = new sqlite3.Database('historico.sqlite');
 
 // Configurar middleware para analisar dados do formulário
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -81,9 +83,24 @@ app.get('/chat', (req, res) => {
 io.on('connection', (socket) => {
     console.log('A user connected');
 
+    hist.each('SELECT username, message FROM historico', async (err, data) =>{
+        if(err){
+            return console.error(err.message);
+        }
+        io.emit('chat message', data);
+    })
+
     // Escuta a mensagem do cliente
     socket.on('chat message', (data) => {
-        console.log('message: ' + data.username + ': ' + data);
+        console.log('message: ' + data.username + ': ' + data.message);
+        const currentDate = DateTime.now();
+        const today = `${currentDate.toFormat('dd/MM/yyyy')}`;
+        const hour = `${currentDate.toFormat('HH:mm:ss')}`;
+        hist.get('INSERT INTO historico (message, username, date, hour) VALUES (?, ?, ?, ?)', [data.message, data.username, today, hour], (err) =>{
+            if(err){
+                return console.error(err.message);
+            }
+        })
         // Envia a mensagem para todos os clientes conectados
         io.emit('chat message', data);
     });
