@@ -15,7 +15,7 @@
             <!-- Lista de mensagens será renderizada aqui -->
         </div>
         <div class="message-input">
-            <input type="text" id="messageInput" placeholder="Digite sua mensagem">
+            <input type="text" id="messageInput" placeholder="Digite sua mensagem" onkeydown="if (event.key === 'Enter') sendMessage()">
             <button onclick="sendMessage()">Enviar</button>
         </div>
         <p id="username" style="display: none;"><%= username %></p>
