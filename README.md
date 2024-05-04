@@ -3,7 +3,7 @@
 </h1>
 
 <p align = "center">
-    <img src="midia/readme/logocha.png" alt="Bótica Chá da Terra" style="width:600px">
+    <img src="midia/readme/logo.png" alt="Bótica Chá da Terra" style="width:600px">
 </p>
 
 <h2 align = "center">
