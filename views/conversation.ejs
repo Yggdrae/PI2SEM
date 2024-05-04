@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversa</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css">
+</head>
+<body>
+    <div class="conversation-container">
+        <div class="conversation-header">
+            <h1 id="contactName">Nome do Contato</h1>
+        </div>
+        <div class="message-list" id="messageList">
+            <!-- Lista de mensagens será renderizada aqui -->
+        </div>
+        <div class="message-input">
+            <input type="text" id="messageInput" placeholder="Digite sua mensagem">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+        <p id="username" style="display: none;"><%= username %></p>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Função para renderizar as mensagens na página
+        function renderMessages(messages) {
+            const messageList = document.getElementById('messageList');
+            messageList.innerHTML = '';
+            messages.forEach(message => {
+                const messageItem = document.createElement('div');
+                messageItem.textContent = `${message.from}: ${message.message}`;
+                messageList.appendChild(messageItem);
+            });
+        }
+
+        // Função para enviar mensagem
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            if (message !== '') {
+                const from = document.getElementById('username').textContent;
+                const to = document.getElementById('contactName').textContent;
+                const data = { from: from, to: to, message: message };
+                socket.emit('chat message', data);
+                messageInput.value = '';
+            }
+        }
+
+        // Obter o nome do contato da URL
+        const contactName = decodeURIComponent(window.location.pathname.split('/').pop());
+        document.getElementById('contactName').textContent = contactName;
+
+        // Entrar na sala de conversa
+        socket.emit('join conversation', { username: document.getElementById('username').textContent, contact: contactName });
+
+        // Receber mensagens do servidor e renderizar na página
+        socket.on('chat message', (msg) => {
+            const messageList = document.getElementById('messageList');
+            const messageItem = document.createElement('div');
+            messageItem.textContent = `${msg.from}: ${msg.message}`;
+            messageList.appendChild(messageItem);
+        });
+    </script>
+</body>
+</html>
