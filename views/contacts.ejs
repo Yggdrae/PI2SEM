@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contatos</title>
+    <link rel="stylesheet" href="/contactstyles.css">
+</head>
+<body>
+    <div class="contacts-container">
+        <h1>Seus Contatos</h1>
+        <div class="contact-list" id="contactList">
+            <% contacts.forEach(contact => { %>
+                <div class="contact-item" onclick="openConversation('<%= contact %>')">
+                    <a href="/conversation/<%= encodeURIComponent(contact) %>?username=<%= encodeURIComponent(username) %>"><%= contact %></a>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Função para abrir a conversa com um contato
+        function openConversation(contact) {
+            const username = '<%= username %>';
+            window.location.href = `/conversation/${encodeURIComponent(contact)}?username=${encodeURIComponent(username)}`;
+        }
+
+        // Receber mensagens do servidor e renderizar na página
+        socket.on('chat message', (msg) => {
+            // Atualize o indicador de mensagens não lidas ou faça outras operações conforme necessário
+        });
+    </script>
+</body>
+</html>
