@@ -3,7 +3,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const path = require('path');
 const routes = require('./routes/routes');
-const { dbUsers, dbHistory } = require('./models/model');
+const { saveMessages } = require('./controllers/controller');
 
 const app = express();
 const server = http.createServer(app);
@@ -31,11 +31,7 @@ io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
         const { from, to, message } = msg;
         const roomName = [from, to].sort().join('-'); // Concatenação ordenada dos nomes de usuário
-        dbHistory.get('INSERT INTO historico (message, from_user, to_user) VALUES (?, ?, ?)', [message, from, to], (err) => {
-            if (err) {
-                console.error(err.message);
-            }
-        });
+        saveMessages(from, to, message);
         io.to(roomName).emit('chat message', msg);
     });
 

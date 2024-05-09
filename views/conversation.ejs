@@ -12,6 +12,11 @@
             <h1 id="contactName">Nome do Contato</h1>
         </div>
         <div class="message-list" id="messageList">
+            <% messages.forEach(message => { %>
+                <div class="message-hist">
+                    <a><%= message.from %>:<%= message.message %></a>
+                </div>
+            <% }); %>
             <!-- Lista de mensagens será renderizada aqui -->
         </div>
         <div class="message-input">
