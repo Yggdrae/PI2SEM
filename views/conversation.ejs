@@ -4,27 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversa</title>
-    <link rel="stylesheet" href="/styles.css" type="text/css">
+    <link rel="stylesheet" href="/convstyles.css" type="text/css">
 </head>
 <body>
     <div class="conversation-container">
         <div class="conversation-header">
             <h1 id="contactName">Nome do Contato</h1>
         </div>
-        <div class="message-list" id="messageList">
+        <li class="message-list" id="messageList">
             <% messages.forEach(message => { %>
-                <div class="message-hist">
-                    <a><%= message.from %>:<%= message.message %></a>
-                </div>
+                <% if(message.from == username) { %>
+                    <li class="own-message">
+                        <a class="message-container"><%= message.from %>:<%= message.message %></a>
+                        <div class="message-hour-own">
+                            <a><%= message.hour %></a>
+                        </div>
+                    </li>
+                <% } else {%>
+                    <li class="other-message">
+                        <a class="message-container"><%= message.from %>:<%= message.message %></a>
+                        <div class="message-hour-other">
+                            <a><%= message.hour %></a>
+                        </div>
+                    </li>
+                <% }%>
             <% }); %>
             <!-- Lista de mensagens será renderizada aqui -->
-        </div>
+                </li>
         <div class="message-input">
             <input type="text" id="messageInput" placeholder="Digite sua mensagem" onkeydown="if (event.key === 'Enter') sendMessage()">
             <button onclick="sendMessage()">Enviar</button>
         </div>
         <p id="username" style="display: none;"><%= username %></p>
     </div>
+
+    <div class="background-image"></div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -63,10 +77,18 @@
 
         // Receber mensagens do servidor e renderizar na página
         socket.on('chat message', (msg) => {
-            const messageList = document.getElementById('messageList');
-            const messageItem = document.createElement('div');
-            messageItem.textContent = `${msg.from}: ${msg.message}`;
-            messageList.appendChild(messageItem);
+            const item = document.createElement('li');
+            const messageContainer = document.createElement('div');
+            messageContainer.textContent = `${msg.from}: ${msg.message}`;
+            messageContainer.classList.add('message-container');
+            item.appendChild(messageContainer);
+            item.classList.add('other-message');
+            if(msg.from === document.getElementById('username').textContent) {
+                item.classList.remove('other-message');
+                item.classList.add('own-message');
+            }
+            document.getElementById('messageList').appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
         });
     </script>
 </body>

@@ -1,4 +1,5 @@
 const { dbUsers, dbHistory } = require('../models/model');
+const { DateTime } = require('luxon');
 
 // Função para obter contatos do banco de dados
 function getContacts(username, callback) {
@@ -22,14 +23,18 @@ function getMessages(username, contact, callback) {
         const messages = rows.map(row => ({
             from: row.from_user,
             to: row.to_user,
-            message: row.message
+            message: row.message,
+            hour: row.hour
         }));
         callback(null, messages);
     });
 }
 
 function saveMessages(from, to, message) {
-    dbHistory.get('INSERT INTO historico (message, from_user, to_user) VALUES (?, ?, ?)', [message, from, to], (err) => {
+    const currentDate = DateTime.now();
+    const today = `${currentDate.toFormat('dd/MM/yyyy')}`;
+    const hour = `${currentDate.toFormat('HH:mm:ss')}`;
+    dbHistory.get('INSERT INTO historico (message, from_user, to_user, date, hour) VALUES (?, ?, ?, ?, ?)', [message, from, to, today, hour], (err) => {
         if (err) {
             console.error(err.message);
         }
