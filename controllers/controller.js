@@ -22,11 +22,18 @@ function getMessages(username, contact, callback) {
         const messages = rows.map(row => ({
             from: row.from_user,
             to: row.to_user,
-            message: row.message,
-            timestamp: row.timestamp
+            message: row.message
         }));
         callback(null, messages);
     });
 }
 
-module.exports = { getContacts, getMessages };
+function saveMessages(from, to, message) {
+    dbHistory.get('INSERT INTO historico (message, from_user, to_user) VALUES (?, ?, ?)', [message, from, to], (err) => {
+        if (err) {
+            console.error(err.message);
+        }
+    });
+}
+
+module.exports = { getContacts, getMessages, saveMessages };
