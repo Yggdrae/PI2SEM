@@ -13,12 +13,14 @@ body {
     width: 70%;
     height: 79%;
     background-color: #fff;
-    padding: 20px;
+    padding: 0;
+    margin: 0;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: fixed; 
     overflow: auto;
     margin-bottom: 10px;
+    list-style-type: none;
 }
 
 .conversation-header {
@@ -28,14 +30,24 @@ body {
     margin-top: -5%
 }
 
-#message-list {
-    list-style-type: none;
+#messageList {
     margin: 10px;
-    padding: 0;
+    overflow: auto;
 }
 
-#message-list li {
+#messageList li {
     margin-bottom: 10px;
+    overflow: auto;
+}
+
+#messageHist {
+    margin: 10px;
+    overflow: auto;
+}
+
+#messageHist li {
+    margin-bottom: 10px;
+    overflow: auto;
 }
 
 .message-container {

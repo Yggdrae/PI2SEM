@@ -11,26 +11,22 @@
         <div class="conversation-header">
             <h1 id="contactName">Nome do Contato</h1>
         </div>
-        <li class="message-list" id="messageList">
-            <% messages.forEach(message => { %>
-                <% if(message.from == username) { %>
+            <li class="message-list" id="messageHist">
+                <% messages.forEach(message => { %>
+                    <% if(message.from == username) { %>
                     <li class="own-message">
                         <a class="message-container"><%= message.from %>:<%= message.message %></a>
                         <div class="message-hour-own">
                             <a><%= message.hour %></a>
                         </div>
                     </li>
-                <% } else {%>
-                    <li class="other-message">
-                        <a class="message-container"><%= message.from %>:<%= message.message %></a>
-                        <div class="message-hour-other">
-                            <a><%= message.hour %></a>
-                        </div>
-                    </li>
                 <% }%>
             <% }); %>
-            <!-- Lista de mensagens será renderizada aqui -->
-                </li>
+            </li>
+
+            <li class="message-list" id="messageList">
+                <!-- Lista de mensagens será renderizada aqui -->
+            </li>
         <div class="message-input">
             <input type="text" id="messageInput" placeholder="Digite sua mensagem" onkeydown="if (event.key === 'Enter') sendMessage()">
             <button onclick="sendMessage()">Enviar</button>
@@ -66,6 +62,21 @@
                 socket.emit('chat message', data);
                 messageInput.value = '';
             }
+        }
+
+        function histRender(from, message) {
+            const item = document.createElement('li');
+            const messageContainer = document.createElement('div');
+            messageContainer.textContent = `${msg.from}: ${msg.message}`;
+            messageContainer.classList.add('message-container');
+            item.appendChild(messageContainer);
+            item.classList.add('other-message');
+            if(msg.from === document.getElementById('username').textContent) {
+                item.classList.remove('other-message');
+                item.classList.add('own-message');
+            }
+            document.getElementById('messageHist').appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
         }
 
         // Obter o nome do contato da URL
