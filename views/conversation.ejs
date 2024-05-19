@@ -11,19 +11,25 @@
         <div class="conversation-header">
             <h1 id="contactName">Nome do Contato</h1>
         </div>
-            <li class="message-list" id="messageHist">
+        <ul class="message-list" id="messageHist">
                 <% messages.forEach(message => { %>
                     <% if(message.from == username) { %>
                     <li class="own-message">
-                        <a class="message-container"><%= message.from %>:<%= message.message %></a>
+                        <div class="message-container"><%= message.from %>:<%= message.message %></div>
                         <div class="message-hour-own">
+                            <a><%= message.hour %></a>
+                        </div>
+                    </li>
+                <% } else {%>
+                    <li class="other-message">
+                        <div class="message-container"><%= message.from %>:<%= message.message %></div>
+                        <div class="message-hour-other">
                             <a><%= message.hour %></a>
                         </div>
                     </li>
                 <% }%>
             <% }); %>
-            </li>
-
+                </ul>
             <li class="message-list" id="messageList">
                 <!-- Lista de mensagens será renderizada aqui -->
             </li>
@@ -35,7 +41,7 @@
     </div>
 
     <div class="background-image"></div>
-
+    
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
