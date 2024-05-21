@@ -4,6 +4,7 @@ const socketIo = require('socket.io');
 const path = require('path');
 const routes = require('./routes/routes');
 const { saveMessages } = require('./controllers/controller');
+const { DateTime } = require('luxon');
 
 const app = express();
 const server = http.createServer(app);
@@ -25,14 +26,19 @@ io.on('connection', (socket) => {
         const { username, contact } = data;
         const roomName = [username, contact].sort().join('-'); // Concatenação ordenada dos nomes de usuário
         socket.join(roomName);
-        console.log(`${username} entrou na sala de conversa com ${contact}`);
+        const hour = `${DateTime.now().toFormat('HH:mm:ss')}`;
+        console.log(`${username} entrou na sala de conversa com ${contact} as ${hour}`);
     });
 
     socket.on('chat message', (msg) => {
         const { from, to, message } = msg;
         const roomName = [from, to].sort().join('-'); // Concatenação ordenada dos nomes de usuário
-        saveMessages(from, to, message);
-        io.to(roomName).emit('chat message', msg);
+        const currentDate = DateTime.now();
+        const today = `${currentDate.toFormat('dd/MM/yyyy')}`;
+        const hour = `${currentDate.toFormat('HH:mm:ss')}`;
+        saveMessages(from, to, message, today, hour);
+        io.to(roomName).emit('chat message', {msg: msg, hour: hour});
+        console.log(`${from}: ${message} --> ${to} as ${hour}`);
     });
 
     socket.on('disconnect', () => {

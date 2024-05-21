@@ -30,10 +30,7 @@ function getMessages(username, contact, callback) {
     });
 }
 
-function saveMessages(from, to, message) {
-    const currentDate = DateTime.now();
-    const today = `${currentDate.toFormat('dd/MM/yyyy')}`;
-    const hour = `${currentDate.toFormat('HH:mm:ss')}`;
+function saveMessages(from, to, message, today, hour) {
     dbHistory.get('INSERT INTO historico (message, from_user, to_user, date, hour) VALUES (?, ?, ?, ?, ?)', [message, from, to, today, hour], (err) => {
         if (err) {
             console.error(err.message);
