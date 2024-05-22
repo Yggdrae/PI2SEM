@@ -2,13 +2,13 @@ const { dbUsers, dbHistory } = require('../models/model');
 const { DateTime } = require('luxon');
 
 // Função para obter contatos do banco de dados
-function getContacts(username, callback) {
-    dbUsers.all('SELECT username FROM users WHERE username != ? ORDER BY username ASC', [username], (err, rows) => {
+function getContacts(nome_social, callback) {
+    dbUsers.all('SELECT nome_social FROM users WHERE nome_social != ? ORDER BY nome_social ASC', [nome_social], (err, rows) => {
         if (err) {
             console.error(err.message);
             return callback(err, null);
         }
-        const contacts = rows.map(row => row.username);
+        const contacts = rows.map(row => row.nome_social);
         callback(null, contacts);
     });
 }
