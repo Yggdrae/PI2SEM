@@ -16,7 +16,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "<h1 align = \"center\">\r      Canal de comunicação interna - CHAT\r </h1>",
   "devDependencies": {
     "nodemon": "^3.1.0"
   }
