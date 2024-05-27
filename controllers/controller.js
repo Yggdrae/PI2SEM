@@ -2,13 +2,13 @@ const { dbUsers, dbHistory } = require('../models/model');
 const { DateTime } = require('luxon');
 
 // Função para obter contatos do banco de dados
-function getContacts(nome_social, callback) {
-    dbUsers.all('SELECT nome_social FROM users WHERE nome_social != ? ORDER BY nome_social ASC', [nome_social], (err, rows) => {
+function getContacts(username, callback) {
+    dbUsers.all('SELECT username, nome_social FROM users WHERE username != ? ORDER BY username ASC', [username], (err, rows) => {
         if (err) {
             console.error(err.message);
             return callback(err, null);
         }
-        const contacts = rows.map(row => row.nome_social);
+        const contacts = rows.map(row => row.username);
         callback(null, contacts);
     });
 }
@@ -29,7 +29,6 @@ function getMessages(username, contact, callback) {
         callback(null, messages);
     });
 }
-
 function saveMessages(from, to, message, today, hour) {
     dbHistory.get('INSERT INTO historico (message, from_user, to_user, date, hour) VALUES (?, ?, ?, ?, ?)', [message, from, to, today, hour], (err) => {
         if (err) {
