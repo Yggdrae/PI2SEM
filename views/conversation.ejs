@@ -108,6 +108,12 @@
             document.getElementById('messageList').appendChild(item);
             document.getElementById('conversation-container').scrollTo(0, document.getElementById('conversation-container').scrollHeight);
         });
+        
+        // Recarrega a página a cada 5 segundos (5000 milissegundos)
+        setInterval(function() {
+            window.location.reload();
+        }, 10000);
+
     </script>
 </body>
 </html>
