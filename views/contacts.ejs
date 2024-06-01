@@ -25,7 +25,7 @@
         // Função para abrir a conversa com um contato
         function openConversation(contact) {
             const username = '<%= username %>';
-            window.location.href = `/conversation/${encodeURIComponent(contact)}?username=${encodeURIComponent(username)}`;
+            window.open (`/conversation/${encodeURIComponent(contact)}?username=${encodeURIComponent(username)}`, '_blank');
         }
 
         // Receber mensagens do servidor e renderizar na página
