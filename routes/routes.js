@@ -1,6 +1,6 @@
 const express = require('express');
 const { getContacts, getMessages } = require('../controllers/controller');
-const { dbUsers, dbHistory } = require('../models/model');
+const { dbUsers, dbHistory, dbConnHistory } = require('../models/model');
 const router = express.Router();
 
 // Rota para a tela inicial de login

@@ -3,7 +3,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const path = require('path');
 const routes = require('./routes/routes');
-const { saveMessages } = require('./controllers/controller');
+const { saveMessages, saveConnHistory } = require('./controllers/controller');
 const { DateTime } = require('luxon');
 
 const app = express();
@@ -25,9 +25,15 @@ io.on('connection', (socket) => {
     socket.on('join conversation', (data) => {
         const { username, contact } = data;
         const roomName = [username, contact].sort().join('-'); // Concatenação ordenada dos nomes de usuário
+        const currentDate = DateTime.now();
+        const today = `${currentDate.toFormat('dd/MM/yyyy')}`;
+        const hour = `${currentDate.toFormat('HH:mm:ss')}`;
         socket.join(roomName);
-        const hour = `${DateTime.now().toFormat('HH:mm:ss')}`;
-        console.log(`${username} entrou na sala de conversa com ${contact} as ${hour}`);
+        console.log(`${username} está na sala de conversa com ${contact} as ${hour}`);
+        
+        const from = username
+        const to = contact
+        saveConnHistory(from, to, today, hour);
     });
 
     socket.on('chat message', (msg) => {
