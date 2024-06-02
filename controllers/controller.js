@@ -137,5 +137,48 @@ function saveConnHistory(from, to, today, hour) {
     });
 }
 
+// Função para verificar se a última connectionHistory é mais recente que a última mensagem enviada
+function isLastConnectionMoreRecent(from, to, callback) {
+    dbConnHistory.get(`SELECT * 
+         FROM connectionHistory 
+         WHERE from_user = ? AND to_user = ? 
+         ORDER BY 
+             strftime('%Y-%m-%d', substr(date, 7, 4) || '-' || substr(date, 4, 2) || '-' || substr(date, 1, 2)) DESC, 
+             hour DESC 
+         LIMIT 1`, 
+        [from, to], 
+        (connErr, lastConnection) => {
+            if (connErr) {
+                return callback(connErr, null);
+            }
 
-module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers, checkUsers, saveConnHistory};
+            dbHistory.get(
+                `SELECT * 
+                 FROM historico 
+                 WHERE (from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?) 
+                 ORDER BY 
+                     strftime('%Y-%m-%d', substr(date, 7, 4) || '-' || substr(date, 4, 2) || '-' || substr(date, 1, 2)) DESC, 
+                     hour DESC 
+                 LIMIT 1`, 
+                [from, to, to, from], 
+                (msgErr, lastMessage) => {
+                    if (msgErr) {
+                        return callback(msgErr, null);
+                    }
+
+                    if (!lastConnection || !lastMessage) {
+                        return callback(new Error('Dados insuficientes para comparação'), null);
+                    }
+
+                    const lastConnDateTime = DateTime.fromFormat(lastConnection.date + ' ' + lastConnection.hour, 'dd/MM/yyyy HH:mm:ss');
+                    const lastMsgDateTime = DateTime.fromFormat(lastMessage.date + ' ' + lastMessage.hour, 'dd/MM/yyyy HH:mm:ss');
+
+                    const isMoreRecent = lastConnDateTime > lastMsgDateTime;
+                    callback(null, isMoreRecent);
+                }
+            );
+        }
+    );
+}
+
+module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers, checkUsers, saveConnHistory, isLastConnectionMoreRecent };
