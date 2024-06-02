@@ -1,4 +1,4 @@
-const { dbUsers } = require('../models/model');
+const { dbUsers, dbHistory, dbConnHistory } = require('../models/model');
 const { DateTime } = require('luxon');
 
 // Função para obter contatos do banco de dados
@@ -109,4 +109,33 @@ async function checkUsers(contact, callback) {
     });
 }
 
-module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers, checkUsers};
+
+// Função para incluir dados no dbConnHistory
+function saveConnHistory(from, to, today, hour) {
+    // Verifica se já existe uma linha com os valores 'from' e 'to'
+    dbConnHistory.get('SELECT * FROM connectionHistory WHERE from_user = ? AND to_user = ?', [from, to], (err, row) => {
+        if (err) {
+            console.error(err.message);
+            return;
+        }
+
+        if (row) {
+            // Atualiza a linha existente com os novos valores
+            dbConnHistory.run('UPDATE connectionHistory SET date = ?, hour = ? WHERE from_user = ? AND to_user = ?', [today, hour, from, to], (updateErr) => {
+                if (updateErr) {
+                    console.error(updateErr.message);
+                }
+            });
+        } else {
+            // Cria uma nova linha
+            dbConnHistory.run('INSERT INTO connectionHistory (from_user, to_user, date, hour) VALUES (?, ?, ?, ?)', [from, to, today, hour], (insertErr) => {
+                if (insertErr) {
+                    console.error(insertErr.message);
+                }
+            });
+        }
+    });
+}
+
+
+module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers, checkUsers, saveConnHistory};
