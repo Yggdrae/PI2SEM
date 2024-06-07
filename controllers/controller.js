@@ -37,4 +37,30 @@ function saveMessages(from, to, message, today, hour) {
     });
 }
 
-module.exports = { getContacts, getMessages, saveMessages };
+// Função para cadastrar usuários novos no banco de dados
+function createUsers(username, nome_social) {
+    dbUsers.get('INSERT INTO users (username, nome_social) VALUES (?, ?)', [username, nome_social], (err) => {
+        if(err) {
+            console.error(err.message);
+        }
+    });
+}
+
+// Função para atualizar dados de usuários no banco de dados
+function updateUsers(id, username, nome_social) {
+    dbUsers.get(`UPDATE users SET username = '${username}', nome_social = '${nome_social}' WHERE id = ${id};`, (err) => {
+        if(err) {
+            console.error(err.message);
+        }
+    });
+}
+
+// Função para deletar usuarios do bando de dados
+function deleteUsers(username) {
+    dbUsers.get(`DELETE FROM users WHERE username = '${username}';`, (err) => {
+        if(err) {
+            console.error(err.message);
+        }
+    })
+}
+module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers };
