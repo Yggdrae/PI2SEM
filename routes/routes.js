@@ -11,6 +11,9 @@ router.get('/', (req, res) => {
 // Rota para a tela de contatos
 router.get('/contacts', (req, res) => {
     const username = req.query.username;
+    if (username === 'admin') {
+        return res.render('admin');
+    }
     getContacts(username, (err, contacts) => {
         if (err) {
             return res.status(500).send('Erro interno do servidor');
