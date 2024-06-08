@@ -29,8 +29,8 @@ function getMessages(username, contact, callback) {
         callback(null, messages);
     });
 }
-function saveMessages(from, to, message, today, hour) {
- dbUsers.get('INSERT INTO historico (message, from_user, to_user, date, hour) VALUES (?, ?, ?, ?, ?)', [message, from, to, today, hour], (err) => {
+function saveMessages(from, to, message, today, hour, ano, mes, dia, hora, min, seg) {
+ dbUsers.get('INSERT INTO historico (message, from_user, to_user, date, hour, years, months, days, hours, minutes, seconds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message, from, to, today, hour, ano, mes, dia, hora, min, seg], (err) => {
         if (err) {
             console.error(err.message);
         }
