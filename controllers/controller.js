@@ -1,4 +1,4 @@
-const { dbUsers, dbHistory } = require('../models/model');
+const { dbUsers } = require('../models/model');
 const { DateTime } = require('luxon');
 
 // Função para obter contatos do banco de dados
@@ -15,7 +15,7 @@ function getContacts(username, callback) {
 
 // Função para obter histórico de mensagens do banco de dados
 function getMessages(username, contact, callback) {
-    dbHistory.all('SELECT * FROM historico WHERE (from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?)', [username, contact, contact, username], (err, rows) => {
+ dbUsers.all('SELECT * FROM historico WHERE (from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?)', [username, contact, contact, username], (err, rows) => {
         if (err) {
             console.error(err.message);
             return callback(err, null);
@@ -29,8 +29,8 @@ function getMessages(username, contact, callback) {
         callback(null, messages);
     });
 }
-function saveMessages(from, to, message, today, hour) {
-    dbHistory.get('INSERT INTO historico (message, from_user, to_user, date, hour) VALUES (?, ?, ?, ?, ?)', [message, from, to, today, hour], (err) => {
+function saveMessages(from, to, message, today, hour, ano, mes, dia, hora, min, seg) {
+ dbUsers.get('INSERT INTO historico (message, from_user, to_user, date, hour, years, months, days, hours, minutes, seconds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message, from, to, today, hour, ano, mes, dia, hora, min, seg], (err) => {
         if (err) {
             console.error(err.message);
         }
