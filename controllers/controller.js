@@ -3,7 +3,7 @@ const { DateTime } = require('luxon');
 
 // Função para obter contatos do banco de dados
 function getContacts(username, callback) {
-    dbUsers.all('SELECT username FROM users WHERE username != ? ORDER BY username ASC', [username], (err, rows) => {
+    dbUsers.all('SELECT username, nome_social FROM users WHERE username != ? ORDER BY username ASC', [username], (err, rows) => {
         if (err) {
             console.error(err.message);
             return callback(err, null);
@@ -29,11 +29,7 @@ function getMessages(username, contact, callback) {
         callback(null, messages);
     });
 }
-
-function saveMessages(from, to, message) {
-    const currentDate = DateTime.now();
-    const today = `${currentDate.toFormat('dd/MM/yyyy')}`;
-    const hour = `${currentDate.toFormat('HH:mm:ss')}`;
+function saveMessages(from, to, message, today, hour) {
     dbHistory.get('INSERT INTO historico (message, from_user, to_user, date, hour) VALUES (?, ?, ?, ?, ?)', [message, from, to, today, hour], (err) => {
         if (err) {
             console.error(err.message);
@@ -41,4 +37,30 @@ function saveMessages(from, to, message) {
     });
 }
 
-module.exports = { getContacts, getMessages, saveMessages };
+// Função para cadastrar usuários novos no banco de dados
+function createUsers(username, nome_social) {
+    dbUsers.get('INSERT INTO users (username, nome_social) VALUES (?, ?)', [username, nome_social], (err) => {
+        if(err) {
+            console.error(err.message);
+        }
+    });
+}
+
+// Função para atualizar dados de usuários no banco de dados
+function updateUsers(id, username, nome_social) {
+    dbUsers.get(`UPDATE users SET username = '${username}', nome_social = '${nome_social}' WHERE id = ${id};`, (err) => {
+        if(err) {
+            console.error(err.message);
+        }
+    });
+}
+
+// Função para deletar usuarios do bando de dados
+function deleteUsers(username) {
+    dbUsers.get(`DELETE FROM users WHERE username = '${username}';`, (err) => {
+        if(err) {
+            console.error(err.message);
+        }
+    })
+}
+module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers };

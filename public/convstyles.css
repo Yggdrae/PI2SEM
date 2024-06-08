@@ -13,29 +13,41 @@ body {
     width: 70%;
     height: 79%;
     background-color: #fff;
-    padding: 20px;
+    padding: 0;
+    margin: 0;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: fixed; 
     overflow: auto;
     margin-bottom: 10px;
+    list-style-type: none;
 }
 
 .conversation-header {
     color: #333;
-    position: fixed;
-    margin-left: 30%;
-    margin-top: -5%
+    object-position: top center;
+    margin: auto;
+    margin-top: initial;
 }
 
-#message-list {
-    list-style-type: none;
+#messageList {
     margin: 10px;
-    padding: 0;
+    overflow: auto;
 }
 
-#message-list li {
+#messageList li {
     margin-bottom: 10px;
+    overflow: auto;
+}
+
+#messageHist {
+    margin: 10px;
+    overflow: auto;
+}
+
+#messageHist li {
+    margin-bottom: 10px;
+    overflow: auto;
 }
 
 .message-container {
@@ -47,12 +59,14 @@ body {
 .other-message .message-container {
     background-color: #f2f2f2;
     float: left;
+    margin-top: 6px;
 }
 
 .own-message .message-container {
     background-color: #4caf50;
     color: white;
     float: right;
+    margin-top: 6px;
 }
 
 .message-input {
@@ -72,11 +86,14 @@ body {
     background-color: #4caf50;
     color: white;
     float: right;
+    font-size: x-small;
+
 }
 
 .message-hour-other {
     background-color: #f2f2f2;
     float: left;
+    font-size: x-small;
 }
 
 input[type="text"] {
@@ -104,7 +121,7 @@ button:hover {
 }
 
 .background-image {
-    position: fixed;
+    position: fixed;    
     top: 0;
     left: 0;
     width: 100%;

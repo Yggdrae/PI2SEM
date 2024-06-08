@@ -7,30 +7,32 @@
     <link rel="stylesheet" href="/convstyles.css" type="text/css">
 </head>
 <body>
-    <div class="conversation-container">
-        <div class="conversation-header">
-            <h1 id="contactName">Nome do Contato</h1>
-        </div>
-        <li class="message-list" id="messageList">
-            <% messages.forEach(message => { %>
-                <% if(message.from == username) { %>
+    <div class="conversation-header">
+        <h1 id="contactName">Nome do Contato</h1>
+    </div>
+    <div class="conversation-container" id="conversation-container">
+        <ul class="message-list" id="messageHist">
+                <% messages.forEach(message => { %>
+                    <% if(message.from == username) { %>
                     <li class="own-message">
-                        <a class="message-container"><%= message.from %>:<%= message.message %></a>
-                        <div class="message-hour-own">
+                        <div class="message-container"><%= message.from %>: <%= message.message %></div><br>
+                        <p><div class="message-hour-own">
                             <a><%= message.hour %></a>
-                        </div>
+                        </div></p>
                     </li>
                 <% } else {%>
                     <li class="other-message">
-                        <a class="message-container"><%= message.from %>:<%= message.message %></a>
-                        <div class="message-hour-other">
+                        <div class="message-container"><%= message.from %>: <%= message.message %></div><br>
+                        <p><div class="message-hour-other">
                             <a><%= message.hour %></a>
-                        </div>
+                        </div></p>
                     </li>
                 <% }%>
             <% }); %>
-            <!-- Lista de mensagens será renderizada aqui -->
-                </li>
+                </ul>
+            <li class="message-list" id="messageList">
+                <!-- Lista de mensagens será renderizada aqui -->
+            </li>
         <div class="message-input">
             <input type="text" id="messageInput" placeholder="Digite sua mensagem" onkeydown="if (event.key === 'Enter') sendMessage()">
             <button onclick="sendMessage()">Enviar</button>
@@ -39,10 +41,14 @@
     </div>
 
     <div class="background-image"></div>
-
+    
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById('conversation-container').scrollTo(0, document.getElementById('conversation-container').scrollHeight);
+        })
 
         // Função para renderizar as mensagens na página
         function renderMessages(messages) {
@@ -79,16 +85,28 @@
         socket.on('chat message', (msg) => {
             const item = document.createElement('li');
             const messageContainer = document.createElement('div');
-            messageContainer.textContent = `${msg.from}: ${msg.message}`;
+            const paragraph = document.createElement('p');
+            const messageHour = document.createElement('div');
+            const br = document.createElement('br');
+            messageContainer.textContent = `${msg.msg.from}: ${msg.msg.message}`;
+            messageHour.textContent = `${msg.hour}`;
             messageContainer.classList.add('message-container');
+            messageHour.classList.add('message-hour-other');
             item.appendChild(messageContainer);
+            item.appendChild(br);
             item.classList.add('other-message');
-            if(msg.from === document.getElementById('username').textContent) {
+            if(msg.msg.from === document.getElementById('username').textContent) {
+                messageHour.classList.remove('message-hour-other');
+                messageHour.classList.add('message-hour-own');
+            }
+            paragraph.appendChild(messageHour);
+            item.appendChild(paragraph);
+            if(msg.msg.from === document.getElementById('username').textContent) {
                 item.classList.remove('other-message');
                 item.classList.add('own-message');
             }
             document.getElementById('messageList').appendChild(item);
-            window.scrollTo(0, document.body.scrollHeight);
+            document.getElementById('conversation-container').scrollTo(0, document.getElementById('conversation-container').scrollHeight);
         });
     </script>
 </body>
