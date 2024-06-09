@@ -1,4 +1,4 @@
-const { dbUsers, dbHistory } = require('../models/model');
+const { dbUsers } = require('../models/model');
 const { DateTime } = require('luxon');
 
 // Função para obter contatos do banco de dados
@@ -62,7 +62,7 @@ function saveMessages(from, to, message, today, hour) {
             }
             const msg_to = row_b.nome_social;
 
-            dbHistory.get('INSERT INTO historico (message, from_user, to_user, date, hour) VALUES (?, ?, ?, ?, ?)', [message, msg_from, msg_to, today, hour], (err) => {
+            dbUsers.get('INSERT INTO historico (message, from_user, to_user, date, hour, years, months, days, hours, minutes, seconds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message, msg_from, msg_to, today, hour, ano, mes, dia, hora, min, seg], (err) => {
                 if (err) {
                     console.error(err.message);
                 }
