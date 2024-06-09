@@ -1,6 +1,7 @@
 const express = require('express');
-const { getContacts, getMessages } = require('../controllers/controller');
+const { getContacts, getMessages, checkUsers } = require('../controllers/controller');
 const { dbUsers } = require('../models/model');
+
 const router = express.Router();
 
 // Rota para a tela inicial de login
@@ -23,27 +24,33 @@ router.get('/contacts', (req, res) => {
 });
 
 // Rota para a tela de conversa
-router.get('/conversation/:contact', (req, res) => {
+router.get('/conversation/:contact', async (req, res) => {
     const username = req.query.username;
-    const contact = req.params.contact;
-    getMessages(username, contact, (err, messages) => {
-        if (err) {
+    await checkUsers(req.params.contact, (err, contact) => {
+        if(err){
             return res.status(500).send('Erro interno do servidor');
         }
-        res.render('conversation', { username: username, contact: contact, messages: messages });
+        const contactName = contact.nome_social;
+        getMessages(username, req.params.contact, (err, messages) => {
+            if (err) {
+                return res.status(500).send('Erro interno do servidor');
+            }
+            res.render('conversation', { username: username, contact: contactName, messages: messages });
+        });
     });
+    
 });
 
 // Autenticação do usuário
 router.post('/login', (req, res) => {
-    const username = req.body.username;
-    dbUsers.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
+    const { username, password } = req.body;
+    dbUsers.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, row) => {
         if (err) {
             console.error(err.message);
             return res.status(500).send('Erro interno do servidor');
         }
         if (!row) {
-            return res.status(401).send('Nome de usuário inválido');
+            return res.status(401).send('Nome de usuário ou senha inválidos!');
         }
         res.redirect(`/contacts?username=${username}`);
     });

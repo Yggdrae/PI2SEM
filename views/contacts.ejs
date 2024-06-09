@@ -11,8 +11,8 @@
         <h1>Seus Contatos</h1>
         <div class="contact-list" id="contactList">
             <% contacts.forEach(contact => { %>
-                <div class="contact-item" onclick="openConversation('<%= contact %>')">
-                    <a href="/conversation/<%= encodeURIComponent(contact) %>?username=<%= encodeURIComponent(username) %>"><%= contact %></a>
+                <div class="contact-item" onclick="openConversation('<%= contact.username %>')">
+                    <a href="/conversation/<%= encodeURIComponent(contact.username) %>?username=<%= encodeURIComponent(username) %>"><%= contact.name %></a>
                 </div>
             <% }); %>
         </div>
