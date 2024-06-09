@@ -2,8 +2,9 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const path = require('path');
+const session = require('express-session');
 const routes = require('./routes/routes');
-const {saveMessages, checkUsers} = require('./controllers/controller');
+const { saveMessages, checkUsers } = require('./controllers/controller');
 const { DateTime } = require('luxon');
 
 const app = express();
@@ -16,6 +17,15 @@ const PORT = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+
+// Configuração do express-session
+app.use(session({
+    secret: 'seuSegredoAqui',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // para produção, mude para true com HTTPS
+}));
+
 app.use('/', routes);
 
 // Conexão Socket.io
@@ -45,17 +55,17 @@ io.on('connection', (socket) => {
         saveMessages(from, to, message, today, hour, ano, mes, dia, hora, min, seg);
 
         checkUsers(from, (err, fromName) => {
-            if(err){
+            if (err) {
                 return res.status(500).send('Erro interno do servidor');
             }
             const msgFromName = fromName.nome_social;
 
             checkUsers(to, (err, toName) => {
-                if(err){
+                if (err) {
                     return res.status(500).send('Erro interno do servidor');
                 }
                 const msgToName = toName.nome_social;
-                io.to(roomName).emit('chat message', {msg: msg, hour: hour, from: msgFromName, to: msgToName});
+                io.to(roomName).emit('chat message', { msg: msg, hour: hour, from: msgFromName, to: msgToName });
                 console.log(`${from}: ${message} --> ${to} as ${hour}`);
             });
         });
