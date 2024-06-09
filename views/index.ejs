@@ -10,8 +10,15 @@
     <div class="login-container">
         <h1>Bem-vindo</h1>
         <form action="/login" method="POST">
-            <input type="text" name="username" placeholder="Nome de usuário" required>
-            <button type="submit">Entrar</button>
+            <div class="input-group">
+                <label for="username">Nome de Usuário:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button class="login-button" type="submit">Entrar</button>
         </form>
     </div>
 

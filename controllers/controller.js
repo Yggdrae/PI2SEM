@@ -8,33 +8,67 @@ function getContacts(username, callback) {
             console.error(err.message);
             return callback(err, null);
         }
-        const contacts = rows.map(row => row.username);
+        const contacts = rows.map(row => ({
+            username: row.username,
+            name: row.nome_social
+        }));
         callback(null, contacts);
     });
 }
 
 // Função para obter histórico de mensagens do banco de dados
 function getMessages(username, contact, callback) {
-    dbHistory.all('SELECT * FROM historico WHERE (from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?)', [username, contact, contact, username], (err, rows) => {
-        if (err) {
+
+    dbUsers.get('SELECT nome_social FROM users WHERE username = ?', [username], (err, row) => {
+        if(err) {
             console.error(err.message);
-            return callback(err, null);
         }
-        const messages = rows.map(row => ({
-            from: row.from_user,
-            to: row.to_user,
-            message: row.message,
-            hour: row.hour
-        }));
-        callback(null, messages);
-    });
+        const msg_from = row.nome_social;
+
+        dbUsers.get('SELECT nome_social FROM users WHERE username = ?', [contact], (err, row_b) => {
+            if(err) {
+                console.error(err.message);
+            }
+            const msg_to = row_b.nome_social;
+
+            dbHistory.all('SELECT * FROM historico WHERE (from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?)', [msg_from, msg_to, msg_to, msg_from], (err, rows) => {
+                if (err) {
+                    console.error(err.message);
+                    return callback(err, null);
+                }
+                const messages = rows.map(row => ({
+                    from: row.from_user,
+                    to: row.to_user,
+                    message: row.message,
+                    hour: row.hour,
+                    username: row.username
+                }));
+                callback(null, messages);
+            });
+        })
+    })
 }
+
 function saveMessages(from, to, message, today, hour) {
-    dbHistory.get('INSERT INTO historico (message, from_user, to_user, date, hour) VALUES (?, ?, ?, ?, ?)', [message, from, to, today, hour], (err) => {
-        if (err) {
+    dbUsers.get('SELECT nome_social FROM users WHERE username = ?', [from], (err, row) => {
+        if(err) {
             console.error(err.message);
         }
-    });
+        const msg_from = row.nome_social;
+
+        dbUsers.get('SELECT nome_social FROM users WHERE username = ?', [to], (err, row_b) => {
+            if(err) {
+                console.error(err.message);
+            }
+            const msg_to = row_b.nome_social;
+
+            dbHistory.get('INSERT INTO historico (message, from_user, to_user, date, hour) VALUES (?, ?, ?, ?, ?)', [message, msg_from, msg_to, today, hour], (err) => {
+                if (err) {
+                    console.error(err.message);
+                }
+            });
+        })
+    })  
 }
 
 // Função para cadastrar usuários novos no banco de dados
@@ -63,4 +97,16 @@ function deleteUsers(username) {
         }
     })
 }
-module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers };
+
+async function checkUsers(contact, callback) {
+    dbUsers.get('SELECT nome_social FROM users WHERE username = ?', [contact], (err, row) => {
+        if (err) {
+            console.error(err.message);
+            return callback(err, null);
+        }
+        const checkedUser = row;
+        callback(null, checkedUser);
+    });
+}
+
+module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers, checkUsers};
