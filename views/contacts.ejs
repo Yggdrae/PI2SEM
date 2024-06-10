@@ -7,8 +7,10 @@
     <link rel="stylesheet" href="/contactstyles.css">
 </head>
 <body>
-    <div class="contacts-container">
+    <div class="contacts-header">
         <h1>Seus Contatos</h1>
+    </div>
+    <div class="contacts-container">
         <div class="contact-list" id="contactList">
             <% contacts.forEach(contact => { %>
                 <div class="contact-item" onclick="openConversation('<%= contact.username %>')">
@@ -17,6 +19,8 @@
             <% }); %>
         </div>
     </div>
+
+    <div class="background-image"></div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
