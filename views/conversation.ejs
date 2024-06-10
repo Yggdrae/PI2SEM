@@ -33,14 +33,13 @@
             <li class="message-list" id="messageList">
                 <!-- Lista de mensagens será renderizada aqui -->
             </li>
-        <div class="message-input">
-            <input type="text" id="messageInput" placeholder="Digite sua mensagem" onkeydown="if (event.key === 'Enter') sendMessage()">
-            <button onclick="sendMessage()">Enviar</button>
-        </div>
         <p id="username" style="display: none;"><%= username %></p>
         <p id="contactName" style="display: none;">Nome</p>
     </div>
-
+    <div class="message-input">
+        <input type="text" id="messageInput" placeholder="Digite sua mensagem" onkeydown="if (event.key === 'Enter') sendMessage()">
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
     <div class="background-image"></div>
     
     <script src="/socket.io/socket.io.js"></script>

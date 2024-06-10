@@ -43,6 +43,7 @@ body {
 #messageHist {
     margin: 10px;
     overflow: auto;
+    padding-inline-start: initial;
 }
 
 #messageHist li {
@@ -72,10 +73,10 @@ body {
 .message-input {
     background: rgba(0, 153, 120, 0.623);
     padding: 0.25rem; 
-    position: fixed; 
-    bottom: 3%; 
+    position: fixed;
+    bottom: 5%;
     left: 14%; 
-    right: 14%; 
+    right: 14%;
     display: flex; 
     height: 3rem; 
     box-sizing: border-box;
