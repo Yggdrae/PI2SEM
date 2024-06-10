@@ -31,7 +31,7 @@ function getMessages(username, contact, callback) {
             }
             const msg_to = row_b.nome_social;
 
-            dbHistory.all('SELECT * FROM historico WHERE (from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?)', [msg_from, msg_to, msg_to, msg_from], (err, rows) => {
+            dbUsers.all('SELECT * FROM historico WHERE (from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?)', [msg_from, msg_to, msg_to, msg_from], (err, rows) => {
                 if (err) {
                     console.error(err.message);
                     return callback(err, null);
@@ -49,7 +49,7 @@ function getMessages(username, contact, callback) {
     })
 }
 
-function saveMessages(from, to, message, today, hour) {
+function saveMessages(from, to, message, today, hour, ano, mes, dia, hora, min, seg) {
     dbUsers.get('SELECT nome_social FROM users WHERE username = ?', [from], (err, row) => {
         if(err) {
             console.error(err.message);
