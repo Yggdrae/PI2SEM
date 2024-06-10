@@ -4,14 +4,22 @@ const { dbUsers } = require('../models/model');
 
 const router = express.Router();
 
+// Middleware para verificar se o usuário está autenticado
+function isAuthenticated(req, res, next) {
+    if (req.session.username) {
+        return next();
+    }
+    res.redirect('/');
+}
+
 // Rota para a tela inicial de login
 router.get('/', (req, res) => {
-    res.render('index', { username: req.query.username });
+    res.render('index', { username: req.session.username });
 });
 
 // Rota para a tela de contatos
-router.get('/contacts', (req, res) => {
-    const username = req.query.username;
+router.get('/contacts', isAuthenticated, (req, res) => {
+    const username = req.session.username;
     if (username === 'admin') {
         return res.render('admin');
     }
@@ -24,10 +32,10 @@ router.get('/contacts', (req, res) => {
 });
 
 // Rota para a tela de conversa
-router.get('/conversation/:contact', async (req, res) => {
-    const username = req.query.username;
+router.get('/conversation/:contact', isAuthenticated, async (req, res) => {
+    const username = req.session.username;
     await checkUsers(req.params.contact, (err, contact) => {
-        if(err){
+        if (err) {
             return res.status(500).send('Erro interno do servidor');
         }
         const contactName = contact.nome_social;
@@ -38,7 +46,6 @@ router.get('/conversation/:contact', async (req, res) => {
             res.render('conversation', { username: username, contact: contactName, messages: messages });
         });
     });
-    
 });
 
 // Autenticação do usuário
@@ -52,8 +59,15 @@ router.post('/login', (req, res) => {
         if (!row) {
             return res.status(401).send('Nome de usuário ou senha inválidos!');
         }
-        res.redirect(`/contacts?username=${username}`);
+        req.session.username = username;
+        res.redirect('/contacts');
     });
+});
+
+// Rota para logout
+router.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/');
 });
 
 module.exports = router;
