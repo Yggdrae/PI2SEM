@@ -68,3 +68,9 @@ body {
     opacity: 0.5;
     z-index: -1;
 }
+
+.adminButton{
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}

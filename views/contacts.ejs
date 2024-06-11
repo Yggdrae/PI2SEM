@@ -32,9 +32,18 @@
             window.location.href = `/conversation/${encodeURIComponent(contact)}`;
         }
 
-        // Receber mensagens do servidor e renderizar na página
-        socket.on('chat message', (msg) => {
-            // Atualize o indicador de mensagens não lidas ou faça outras operações conforme necessário
+        document.addEventListener('DOMContentLoaded', () => {
+            const username = '<%= username %>';
+            if (username === 'admin') {
+                const adminButton = document.createElement('button');
+                adminButton.className = 'adminButton';
+                adminButton.textContent = 'Configuração';
+                adminButton.onclick = () => {
+                    window.location.href = '/admin';
+                };
+                const contactsHeader = document.querySelector('.contacts-header');
+                contactsHeader.insertBefore(adminButton, contactsHeader.querySelector('h1'));
+            }
         });
     </script>
 </body>
