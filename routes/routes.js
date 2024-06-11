@@ -1,6 +1,6 @@
 const express = require('express');
 const { getContacts, getMessages, checkUsers } = require('../controllers/controller');
-const { dbUsers, dbHistory, dbConnHistory } = require('../models/model');
+const { dbUsers } = require('../models/model');
 const router = express.Router();
 
 // Middleware para verificar se o usuário está autenticado
