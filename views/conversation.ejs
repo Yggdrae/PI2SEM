@@ -12,27 +12,27 @@
     </div>
     <div class="conversation-container" id="conversation-container">
         <ul class="message-list" id="messageHist">
-                <% messages.forEach(message => { %>
-                    <% if(message.from != contact) { %>
-                    <li class="own-message">
-                        <div class="message-container"><%= message.from %>: <%= message.message %></div><br>
-                        <p><div class="message-hour-own">
-                            <a><%= message.hour %></a>
-                        </div></p>
-                    </li>
-                <% } else {%>
-                    <li class="other-message">
-                        <div class="message-container"><%= message.from %>: <%= message.message %></div><br>
-                        <p><div class="message-hour-other">
-                            <a><%= message.hour %></a>
-                        </div></p>
-                    </li>
-                <% }%>
+            <% messages.forEach(message => { %>
+                <% if(message.from != contact) { %>
+                <li class="own-message">
+                    <div class="message-container"><%= message.from %>: <%= message.message %></div><br>
+                    <p><div class="message-hour-own">
+                        <a><%= message.hour %></a>
+                    </div></p>
+                </li>
+            <% } else {%>
+                <li class="other-message">
+                    <div class="message-container"><%= message.from %>: <%= message.message %></div><br>
+                    <p><div class="message-hour-other">
+                        <a><%= message.hour %></a>
+                    </div></p>
+                </li>
+            <% }%>
             <% }); %>
-                </ul>
-            <li class="message-list" id="messageList">
-                <!-- Lista de mensagens será renderizada aqui -->
-            </li>
+        </ul>
+        <li class="message-list" id="messageList">
+            <!-- Lista de mensagens será renderizada aqui -->
+        </li>
         <p id="username" style="display: none;"><%= username %></p>
         <p id="contactName" style="display: none;">Nome</p>
     </div>
@@ -50,7 +50,7 @@
             document.getElementById('conversation-container').scrollTo(0, document.getElementById('conversation-container').scrollHeight);
         })
 
-        
+
         // Obter o nome do contato da URL
         const contactUsername = decodeURIComponent(window.location.pathname.split('/').pop());
         document.getElementById('contactName').textContent = contactUsername;
@@ -67,7 +67,7 @@
                 messageInput.value = '';
             }
         }
-        
+
         // Entrar na sala de conversa
         socket.emit('join conversation', { username: document.getElementById('username').textContent, contact: contactUsername });
 
@@ -85,25 +85,19 @@
             item.appendChild(messageContainer);
             item.appendChild(br);
             item.classList.add('other-message');
-            if(msg.msg.from === document.getElementById('username').textContent) {
+            if (msg.msg.from === document.getElementById('username').textContent) {
                 messageHour.classList.remove('message-hour-other');
                 messageHour.classList.add('message-hour-own');
             }
             paragraph.appendChild(messageHour);
             item.appendChild(paragraph);
-            if(msg.msg.from === document.getElementById('username').textContent) {
+            if (msg.msg.from === document.getElementById('username').textContent) {
                 item.classList.remove('other-message');
                 item.classList.add('own-message');
             }
             document.getElementById('messageList').appendChild(item);
             document.getElementById('conversation-container').scrollTo(0, document.getElementById('conversation-container').scrollHeight);
         });
-        
-        // Recarrega a página a cada 5 segundos (5000 milissegundos)
-        setInterval(function() {
-            window.location.reload();
-        }, 10000);
-
     </script>
 </body>
 </html>
