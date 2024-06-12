@@ -4,7 +4,7 @@ const socketIo = require('socket.io');
 const path = require('path');
 const session = require('express-session');
 const routes = require('./routes/routes');
-const { saveMessages, checkUsers } = require('./controllers/controller');
+const { saveMessages, checkUsers, saveConnHistory  } = require('./controllers/controller');
 const { DateTime } = require('luxon');
 
 const app = express();
@@ -35,9 +35,23 @@ io.on('connection', (socket) => {
     socket.on('join conversation', (data) => {
         const { username, contact } = data;
         const roomName = [username, contact].sort().join('-'); // Concatenação ordenada dos nomes de usuário
+        const currentDate = DateTime.now();
+        const today = `${currentDate.toFormat('dd/MM/yyyy')}`;
+        const hour = `${currentDate.toFormat('HH:mm:ss')}`;
         socket.join(roomName);
-        const hour = `${DateTime.now().toFormat('HH:mm:ss')}`;
-        console.log(`${username} entrou na sala de conversa com ${contact} as ${hour}`);
+        console.log(`${username} está na sala de conversa com ${contact} as ${hour}`);
+        
+        const from = username
+        const to = contact
+        saveConnHistory(from, to, today, hour);
+
+        // Enviar ping ao servidor a cada 10 segundos
+        setInterval(() => {
+            const pingTime = DateTime.now();
+            const pingToday = `${pingTime.toFormat('dd/MM/yyyy')}`;
+            const pingHour = `${pingTime.toFormat('HH:mm:ss')}`;
+            saveConnHistory(from, to, pingToday, pingHour);
+        }, 10000);
     });
 
     socket.on('chat message', (msg) => {
