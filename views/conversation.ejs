@@ -55,17 +55,6 @@
         const contactUsername = decodeURIComponent(window.location.pathname.split('/').pop());
         document.getElementById('contactName').textContent = contactUsername;
 
-        // Função para renderizar as mensagens na página
-        function renderMessages(messages) {
-            const messageList = document.getElementById('messageList');
-            messageList.innerHTML = '';
-            messages.forEach(message => {
-                const messageItem = document.createElement('div');
-                messageItem.textContent = `${message.from}: ${message.message}`;
-                messageList.appendChild(messageItem);
-            });
-        }
-
         // Função para enviar mensagem
         function sendMessage() {
             const messageInput = document.getElementById('messageInput');
