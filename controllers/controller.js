@@ -19,26 +19,28 @@ function getContacts(username, callback) {
 // Função para obter histórico de mensagens do banco de dados
 function getMessages(username, contact, callback) {
 
-    dbUsers.get('SELECT nome_social FROM users WHERE username = ?', [username], (err, row) => {
+    dbUsers.get('SELECT username, nome_social FROM users WHERE username = ?', [username], (err, row) => {
         if(err) {
             console.error(err.message);
         }
         const msg_from = row.nome_social;
+        const usernameEnviando = row.username;
 
-        dbUsers.get('SELECT nome_social FROM users WHERE username = ?', [contact], (err, row_b) => {
+        dbUsers.get('SELECT username, nome_social FROM users WHERE username = ?', [contact], (err, row_b) => {
             if(err) {
                 console.error(err.message);
             }
             const msg_to = row_b.nome_social;
+            const usernameRecebendo = row_b.username;
 
-            dbUsers.all('SELECT * FROM historico WHERE (from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?)', [msg_from, msg_to, msg_to, msg_from], (err, rows) => {
+            dbUsers.all('SELECT * FROM historico WHERE (from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?)', [usernameEnviando, usernameRecebendo, usernameRecebendo, usernameEnviando], (err, rows) => {
                 if (err) {
                     console.error(err.message);
                     return callback(err, null);
                 }
                 const messages = rows.map(row => ({
-                    from: row.from_user,
-                    to: row.to_user,
+                    from: row.nome_from,
+                    to: row.nome_to,
                     message: row.message,
                     hour: row.hour,
                     username: row.username
@@ -62,7 +64,7 @@ function saveMessages(from, to, message, today, hour, ano, mes, dia, hora, min, 
             }
             const msg_to = row_b.nome_social;
 
-            dbUsers.get('INSERT INTO historico (message, from_user, to_user, date, hour, years, months, days, hours, minutes, seconds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message, msg_from, msg_to, today, hour, ano, mes, dia, hora, min, seg], (err) => {
+            dbUsers.get('INSERT INTO historico (message, from_user, to_user, date, hour, years, months, days, hours, minutes, seconds, nome_from, nome_to) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message, from, to, today, hour, ano, mes, dia, hora, min, seg, msg_from, msg_to], (err) => {
                 if (err) {
                     console.error(err.message);
                 }
