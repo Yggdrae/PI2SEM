@@ -44,6 +44,14 @@ io.on('connection', (socket) => {
         const from = username
         const to = contact
         saveConnHistory(from, to, today, hour);
+
+        // Enviar ping ao servidor a cada 10 segundos
+        setInterval(() => {
+            const pingTime = DateTime.now();
+            const pingToday = `${pingTime.toFormat('dd/MM/yyyy')}`;
+            const pingHour = `${pingTime.toFormat('HH:mm:ss')}`;
+            saveConnHistory(from, to, pingToday, pingHour);
+        }, 10000);
     });
 
     socket.on('chat message', (msg) => {
