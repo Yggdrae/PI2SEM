@@ -1,12 +1,77 @@
-body {
+* {
     margin: 0;
-    padding-bottom: 3rem;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+}
+
+.content{
+    display: none;
+}
+
+.content.show{
+    display: flex;
+    gap: 14px;
+    background-color: rgb(0, 123, 90);
+    border-radius: 0px 0px 8px 8px;
+    padding: 20px;
+    height: 500px;
+    justify-content: center;
+}
+
+.button-container {
+    background-color: #fff;
+    width: 70%;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .8);
+    margin-bottom: 10px;
+}
+
+.tab-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.tab-btn{
+    width: 100%;
+    border: none;
+    color: #f2f2f2;
+    background-color: rgb(57, 177, 149);
+    border-radius: 8px 8px 0px 0px;
+    cursor: pointer;
+    padding: 8px;
+    transition: background-color .3s ease;
+}
+
+.tab-btn:hover{
+    background-color: rgb(0, 123, 90);
+}
+
+.tab-btn.active{
+    background-color: rgb(0, 123, 90);
+}
+
+.admin-header {
+    position: fixed;
+    top: 5px;
+    color: #333;
+    margin: auto;
+    margin-top: initial;
+}
+
+.login-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 #form {
@@ -34,6 +99,7 @@ body {
     outline: none;
 }
 
+
 #form > button {
 
     border: none;
@@ -41,19 +107,6 @@ body {
     margin: 0.25rem;
     outline: none;
     color: #fff;
-}
-
-.login-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    margin-top: 0;
-    text-align: center;
-    color: #333;
 }
 
 input[type="text"] {
@@ -89,7 +142,7 @@ button:hover {
 }
 
 .background-image {
-    position: fixed;
+    position: fixed;    
     top: 0;
     left: 0;
     width: 100%;

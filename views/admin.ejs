@@ -1,35 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Admin</title>
+    <link rel="stylesheet" href="/adminstyles.css">
 </head>
 <body>
-    <h1>Área de Administração</h1>
-    <div>
-        <button onclick="openCadastro()">Cadastrar</button>
-        <button onclick="openEdicao()">Editar</button>
-        <button onclick="openDeletar()">Deletar</button>
-        <button onclick="openChat()">Chat</button>
+    <h1 class="admin-header">Configurações do Administrador</h1>
+    <div class="button-container">
+        <div class="tab-buttons">
+            <button class="tab-btn active" content-id="cadastrar">
+                Cadastrar
+            </button>
+            <button class="tab-btn" content-id="editar">
+                Editar
+            </button>
+            <button class="tab-btn" content-id="excluir">
+                Excluir
+            </button>
+        </div>
+        
+
+        <div class="tab-contents">
+            <div class="content" id="cadastrar">
+                <div class="login-container">
+                    <form>
+                        <div class="input-group">
+                            <label for="nomeSocialCad">Nome Social:</label>
+                            <input type="text" id="nomeSocialCad" name="nomeSocialCad" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="usernameCad">Nome de Usuário:</label>
+                            <input type="text" id="usernameCad" name="usernameCad" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="passwordCad">Senha:</label>
+                            <input type="password" id="passwordCad" name="passwordCad" required>
+                        </div>
+                        <button class="login-button" type="submit">Confirmar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="content" id="editar">
+                <div  class="login-container">
+                    <form>
+                        <div class="input-group">
+                            <label for="username">Username do usuário a ser editado:</label>
+                            <input type="text" id="username" name="username">
+                        </div>
+                        <div class="input-group">
+                            <label for="nomeSocialEditar">Novo Nome Social:</label>
+                            <input type="text" id="nomeSocialEditar" name="nomeSocialEditar">
+                        </div>
+                        <div class="input-group">
+                            <label for="usernameEditar">Novo Nome de Usuário:</label>
+                            <input type="text" id="usernameEditar" name="usernameEditar">
+                        </div>
+                        <div class="input-group">
+                            <label for="passwordEditar">Nova Senha:</label>
+                            <input type="password" id="passwordEditar" name="passwordEditar">
+                        </div>
+                        <button class="login-button" type="submit">Confirmar</button>
+                    </form><br><br>
+                    <p>Os campos que não forem sofrer alteração, apenas manter em branco!</p>
+                </div>
+            </div>
+            
+            <div class="content" id="excluir">
+                <div  class="login-container">
+                    <form>
+                        <div class="input-group">
+                            <label for="usernameExcluir">Nome de Usuário:</label>
+                            <input type="text" id="usernameExcluir" name="usernameExcluir" required>
+                        </div>
+                        <button class="login-button" type="submit">Confirmar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <div class="background-image"></div>
+    
     <script>
-        function openCadastro() {
-            window.location.href = '/cadastrar';
+        const tabs = document.querySelectorAll('.tab-btn');
+
+        tabs.forEach(tab => tab.addEventListener('click', () => tabClicked(tab)));
+
+        const tabClicked = (tab) => {
+            tabs.forEach(tab => tab.classList.remove('active'));
+            tab.classList.add('active');
+
+
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => content.classList.remove('show'));
+
+            const contentId = tab.getAttribute('content-id');
+
+            const content = document.getElementById(contentId);
+            
+            content.classList.add('show');
         }
 
-        function openEdicao() {
-            window.location.href = '/editar';
-        }
-
-        function openDeletar() {
-            window.location.href = '/deletar';
-        }
-
-        function openChat() {
-            window.location.href = '/contacts';
-        }
+        const currentActiveTab = document.querySelector('.tab-btn.active');
+        tabClicked(currentActiveTab);
     </script>
 </body>
 </html>
