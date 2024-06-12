@@ -16,7 +16,7 @@ body {
     padding: 0;
     margin: 0;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .8);
     position: fixed; 
     overflow: auto;
     margin-bottom: 10px;
@@ -36,7 +36,7 @@ body {
 }
 
 .contact-item {
-    background-color: #f5f5f5;
+    background-color: rgb(6, 153, 119);
     padding: 10px 20px;
     margin-top: 10px;
     margin-left: 10px;
@@ -45,15 +45,16 @@ body {
     border-radius: 10px;
     transition: background-color 0.3s ease;
     cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
 }
 
 .contact-item a {
     text-decoration: none;
-    color: #333;
+    color: #ffffff;
 }
 
 .contact-item:hover {
-    background-color: #e0e0e0;
+    background-color: rgb(6, 61, 45);
 }
 
 .background-image {
@@ -73,4 +74,17 @@ body {
     position: fixed;
     top: 10px;
     left: 10px;
+    padding: 9px 20px;
+    background-color: rgba(6, 153, 119);
+    color:#f2f2f2;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    border: none;
+    outline: none;
+    transition: background-color .3s ease;
+}
+
+.adminButton:hover{
+    background-color: rgb(6, 61, 45);
 }
