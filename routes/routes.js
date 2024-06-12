@@ -1,5 +1,5 @@
 const express = require('express');
-const { getContacts, getMessages, checkUsers } = require('../controllers/controller');
+const { getContacts, getMessages, checkUsers, createUsers, updateUsers, deleteUsers } = require('../controllers/controller');
 const { dbUsers } = require('../models/model');
 const router = express.Router();
 
@@ -33,8 +33,8 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/admin', isAuthenticated, (req, res) => {
-        res.render('admin');
-    });
+    res.render('admin');
+});
 
 // Rota para a tela de contatos
 router.get('/contacts', isAuthenticated, (req, res) => {
@@ -68,6 +68,25 @@ router.get('/conversation/:contact', isAuthenticated, async (req, res) => {
 router.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
+});
+
+// Rotas de administração
+router.post('/admin/cadastrar', isAuthenticated, (req, res) => {
+    const { usernameCad, nomeSocialCad, passwordCad } = req.body;
+    createUsers(usernameCad, nomeSocialCad, passwordCad);
+    res.redirect('/contacts');
+});
+
+router.post('/admin/editar', isAuthenticated, (req, res) => {
+    const { username, nomeSocialEditar, usernameEditar, passwordEditar } = req.body;
+    updateUsers(username, nomeSocialEditar, usernameEditar, passwordEditar);
+    res.redirect('/contacts');
+});
+
+router.post('/admin/excluir', isAuthenticated, (req, res) => {
+    const { usernameExcluir } = req.body;
+    deleteUsers(usernameExcluir);
+    res.redirect('/contacts');
 });
 
 module.exports = router;

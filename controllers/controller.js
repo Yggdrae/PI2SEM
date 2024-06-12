@@ -18,7 +18,6 @@ function getContacts(username, callback) {
 
 // Função para obter histórico de mensagens do banco de dados
 function getMessages(username, contact, callback) {
-
     dbUsers.get('SELECT username, nome_social FROM users WHERE username = ?', [username], (err, row) => {
         if(err) {
             console.error(err.message);
@@ -47,8 +46,8 @@ function getMessages(username, contact, callback) {
                 }));
                 callback(null, messages);
             });
-        })
-    })
+        });
+    });
 }
 
 function saveMessages(from, to, message, today, hour, ano, mes, dia, hora, min, seg) {
@@ -69,13 +68,13 @@ function saveMessages(from, to, message, today, hour, ano, mes, dia, hora, min, 
                     console.error(err.message);
                 }
             });
-        })
-    })  
+        });
+    });  
 }
 
 // Função para cadastrar usuários novos no banco de dados
-function createUsers(username, nome_social) {
-    dbUsers.get('INSERT INTO users (username, nome_social) VALUES (?, ?)', [username, nome_social], (err) => {
+function createUsers(username, nome_social, password) {
+    dbUsers.run('INSERT INTO users (username, nome_social, password) VALUES (?, ?, ?)', [username, nome_social, password], (err) => {
         if(err) {
             console.error(err.message);
         }
@@ -83,21 +82,39 @@ function createUsers(username, nome_social) {
 }
 
 // Função para atualizar dados de usuários no banco de dados
-function updateUsers(id, username, nome_social) {
-    dbUsers.get(`UPDATE users SET username = '${username}', nome_social = '${nome_social}' WHERE id = ${id};`, (err) => {
+function updateUsers(username, nome_social, newUsername, password) {
+    let query = 'UPDATE users SET ';
+    let params = [];
+    if (nome_social) {
+        query += 'nome_social = ?, ';
+        params.push(nome_social);
+    }
+    if (newUsername) {
+        query += 'username = ?, ';
+        params.push(newUsername);
+    }
+    if (password) {
+        query += 'password = ?, ';
+        params.push(password);
+    }
+    query = query.slice(0, -2); // Remove a última vírgula
+    query += ' WHERE username = ?';
+    params.push(username);
+    
+    dbUsers.run(query, params, (err) => {
         if(err) {
             console.error(err.message);
         }
     });
 }
 
-// Função para deletar usuarios do bando de dados
+// Função para deletar usuários do banco de dados
 function deleteUsers(username) {
-    dbUsers.get(`DELETE FROM users WHERE username = '${username}';`, (err) => {
+    dbUsers.run('DELETE FROM users WHERE username = ?', [username], (err) => {
         if(err) {
             console.error(err.message);
         }
-    })
+    });
 }
 
 async function checkUsers(contact, callback) {
@@ -110,7 +127,6 @@ async function checkUsers(contact, callback) {
         callback(null, checkedUser);
     });
 }
-
 
 // Função para incluir dados no dbUsers
 function saveConnHistory(from, to, today, hour) {
