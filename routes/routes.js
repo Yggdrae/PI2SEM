@@ -33,6 +33,9 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/admin', isAuthenticated, (req, res) => {
+    if(req.session.username != 'admin'){
+        return res.status(404).send("Proibido");
+    }
     res.render('admin');
 });
 
@@ -55,11 +58,14 @@ router.get('/conversation/:contact', isAuthenticated, async (req, res) => {
             return res.status(500).send('Erro interno do servidor');
         }
         const contactName = contact.nome_social;
+        const contactUsername = contact.username;
+        console.log(contactName);
+        console.log(contactUsername);
         getMessages(username, req.params.contact, (err, messages) => {
             if (err) {
                 return res.status(500).send('Erro interno do servidor');
             }
-            res.render('conversation', { username: username, contact: contactName, messages: messages });
+            res.render('conversation', { username: username, contact: contactName, contactUsername: contactUsername, messages: messages });
         });
     });
 });
