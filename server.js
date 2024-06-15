@@ -37,8 +37,6 @@ io.on('connection', (socket) => {
         const listUsers = [];
         getContacts(username, (err, contacts) => {
             contacts.forEach(contact => {
-                console.log(username);
-                console.log(contact.username);
                 /*checkIfNewer(username, contact.username, (err, receivedName) => {
                     listUsers.push(receivedName);
                     console.log(receivedName);

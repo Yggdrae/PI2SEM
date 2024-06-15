@@ -119,7 +119,7 @@ function deleteUsers(username) {
 }
 
 async function checkUsers(contact, callback) {
-    dbUsers.get('SELECT nome_social FROM users WHERE username = ?', [contact], (err, row) => {
+    dbUsers.get('SELECT * FROM users WHERE username = ?', [contact], (err, row) => {
         if (err) {
             console.error(err.message);
             return callback(err, null);

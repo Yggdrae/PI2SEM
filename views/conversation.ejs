@@ -13,7 +13,7 @@
     <div class="conversation-container" id="conversation-container">
         <ul class="message-list" id="messageHist">
             <% messages.forEach(message => { %>
-                <% if(message.from_username != contact) { %>
+                <% if(message.from_username != contactUsername) { %>
                 <li class="own-message">
                     <div class="message-container"><%= message.from %>: <%= message.message %></div><br>
                     <p><div class="message-hour-own">
