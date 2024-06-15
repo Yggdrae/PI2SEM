@@ -201,21 +201,25 @@ function isLastConnectionMoreRecent(from, to, callback) {
     );
 }
 
-/*function checkIfNewer(username, contact, callback) {
+function checkIfNewer(username, contact, callback) {
     dbUsers.get('SELECT * from historico WHERE from_user = ? AND to_user = ? ORDER BY id_historico DESC LIMIT 1', [contact, username], (errHist, rowMsg) => {
         if(errHist){ //seleciona a ultima mensagem do contato para o usuario logado
             console.error(errHist.message);
         }
-        console.log(rowMsg);
         dbUsers.get('SELECT * from connectionHistory WHERE from_user = ? AND to_user = ? LIMIT 1', [username, contact], (errConn, rowConn) => {
             if(errConn){ //seleciona a ultima conexão do usuario logado a conversa do contato
             console.error(errConn.message);
             }
-            if(rowConn.date <= rowMsg && rowConn.hour < rowMsg.hour){
-                callback(null, rowMsg.nome_from);
+            if((rowMsg && rowConn)){
+                if((rowConn.date < rowMsg.date) || (rowConn.date == rowMsg.date && rowConn.hour < rowMsg.hour)){
+                    callback(null, rowMsg.from_user);
+                }
             }
+            if(rowMsg && !rowConn){
+                callback(null, rowMsg.from_user);
+            };
         })
     });
-}*/
+}
 
-module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers, checkUsers, saveConnHistory, isLastConnectionMoreRecent, /*checkIfNewer*/ };
+module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers, checkUsers, saveConnHistory, isLastConnectionMoreRecent, checkIfNewer };

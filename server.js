@@ -4,7 +4,7 @@ const socketIo = require('socket.io');
 const path = require('path');
 const session = require('express-session');
 const routes = require('./routes/routes');
-const { saveMessages, checkUsers, saveConnHistory, getContacts, isLastConnectionMoreRecent, /*checkIfNewer*/  } = require('./controllers/controller');
+const { saveMessages, checkUsers, saveConnHistory, getContacts, isLastConnectionMoreRecent, checkIfNewer  } = require('./controllers/controller');
 const { DateTime } = require('luxon');
 
 const app = express();
@@ -34,13 +34,17 @@ io.on('connection', (socket) => {
 
     socket.on("newMessageCheck", (data) => {
         const username = data;
-        const listUsers = [];
         getContacts(username, (err, contacts) => {
+            if(err){
+                console.err(err.message);
+            }
             contacts.forEach(contact => {
-                /*checkIfNewer(username, contact.username, (err, receivedName) => {
-                    listUsers.push(receivedName);
-                    console.log(receivedName);
-                })*/
+                checkIfNewer(username, contact.username, (err, receivedName) => {
+                    if(err){
+                        console.err(err.message);
+                    }
+                    socket.emit("newMessageCheck", receivedName);
+                })
             })
         });
     });

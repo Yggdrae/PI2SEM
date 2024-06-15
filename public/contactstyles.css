@@ -88,3 +88,9 @@ body {
 .adminButton:hover{
     background-color: rgb(6, 61, 45);
 }
+
+.NewMsgDiv{
+    float: right;
+    position: relative;
+    top: -20px;
+}

@@ -13,7 +13,7 @@
     <div class="contacts-container">
         <div class="contact-list" id="contactList">
             <% contacts.forEach(contact => { %>
-                <div class="contact-item" id="'<%= contact.name %>'" onclick="openConversation('<%= contact.username %>')">
+                <div class="contact-item" id="<%= contact.username %>" onclick="openConversation('<%= contact.username %>')">
                     <a href="/conversation/<%= encodeURIComponent(contact.username) %>?username=<%= encodeURIComponent(username) %>"><%= contact.name %></a>
                 </div>
             <% }); %>
@@ -49,10 +49,20 @@
         setInterval(() => {
             const username = '<%= username %>';
             socket.emit("newMessageCheck", username);
-        }, 2000);
+        }, 1000);
 
-        socket.on("newMessageCheck", (data) =>{
-            
+        socket.on("newMessageCheck", (contato) =>{
+            const checkElement = document.getElementsByClassName(`NewMsgBr-${contato}`).length;
+            console.log(checkElement);
+            if(checkElement === 0){
+                const divNewMsg = document.createElement('div');
+                const br = document.createElement('br');
+                divNewMsg.textContent = "Nova Mensagem!";
+                divNewMsg.classList.add(`NewMsgDiv`);
+                br.classList.add(`NewMsgBr-${contato}`);
+                document.getElementById(contato).append(br);
+                document.getElementById(contato).append(divNewMsg);
+            }
         })
     </script>
 </body>
