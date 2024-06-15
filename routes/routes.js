@@ -33,6 +33,9 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/admin', isAuthenticated, (req, res) => {
+    if(req.session.username != 'admin'){
+        return res.status(404).send("Proibido");
+    }
     res.render('admin');
 });
 

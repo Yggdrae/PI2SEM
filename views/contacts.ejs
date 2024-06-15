@@ -13,7 +13,7 @@
     <div class="contacts-container">
         <div class="contact-list" id="contactList">
             <% contacts.forEach(contact => { %>
-                <div class="contact-item" onclick="openConversation('<%= contact.username %>')">
+                <div class="contact-item" id="'<%= contact.name %>'" onclick="openConversation('<%= contact.username %>')">
                     <a href="/conversation/<%= encodeURIComponent(contact.username) %>?username=<%= encodeURIComponent(username) %>"><%= contact.name %></a>
                 </div>
             <% }); %>
@@ -45,6 +45,15 @@
                 contactsHeader.insertBefore(adminButton, contactsHeader.querySelector('h1'));
             }
         });
+
+        setInterval(() => {
+            const username = '<%= username %>';
+            socket.emit("newMessageCheck", username);
+        }, 2000);
+
+        socket.on("newMessageCheck", (data) =>{
+            
+        })
     </script>
 </body>
 </html>
