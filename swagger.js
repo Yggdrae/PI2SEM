@@ -1,4 +1,4 @@
-import swaggerAutogen from 'swagger-autogen'
+const swaggerAutogen  = ('swagger-autogen')({openapi: '3.0.0'});
 
 const doc = {
     info: {
@@ -13,6 +13,7 @@ const doc = {
 };
 
 const outputFile = './swagger-output.json';
+const routes = ['./routes/routes.js'];
 const endpointsFiles = ['./server.js'];
 
 swaggerAutogen({ openapi: "3.0.0" })(outputFile, endpointsFiles, doc)
