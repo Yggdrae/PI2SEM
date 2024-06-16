@@ -6,6 +6,8 @@ const session = require('express-session');
 const routes = require('./routes/routes');
 const { saveMessages, checkUsers, saveConnHistory, getContacts, isLastConnectionMoreRecent, checkIfNewer  } = require('./controllers/controller');
 const { DateTime } = require('luxon');
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger-output.json');
 
 const app = express();
 const server = http.createServer(app);
@@ -106,6 +108,8 @@ io.on('connection', (socket) => {
         console.log('Usuário desconectado');
     });
 });
+
+app.use('/docs',swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // Iniciar o servidor
 server.listen(PORT, () => {
