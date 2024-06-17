@@ -5,10 +5,12 @@
     "express-session": "^1.18.0",
     "luxon": "^3.4.4",
     "socket.io": "^4.7.5",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "swagger-ui-express": "^5.0.1"
   },
   "scripts": {
     "start": "node server.js",
+    "swagger": "node swagger.js",
     "dev": "npx nodemon server.js"
   },
   "name": "repoteste",
@@ -19,6 +21,7 @@
   "license": "ISC",
   "description": "<h1 align = \"center\">\r      Canal de comunicação interna - CHAT\r </h1>",
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "swagger-autogen": "^2.23.7"
   }
 }
