@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
             const pingToday = `${pingTime.toFormat('dd/MM/yyyy')}`;
             const pingHour = `${pingTime.toFormat('HH:mm:ss')}`;
             saveConnHistory(from, to, pingToday, pingHour);
-        }, 10000);
+        }, 1000);
     });
 
     socket.on('chat message', (msg) => {
@@ -98,7 +98,7 @@ io.on('connection', (socket) => {
                     return res.status(500).send('Erro interno do servidor');
                 }
                 const msgToName = toName.nome_social;
-                io.to(roomName).emit('chat message', { msg: msg, hour: hour, from: msgFromName, to: msgToName });
+                io.to(roomName).emit('chat message', { msg: msg, hour: hour, date: today, from: msgFromName, to: msgToName });
                 console.log(`${from}: ${message} --> ${to} as ${hour}`);
             });
         });

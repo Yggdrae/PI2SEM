@@ -43,7 +43,8 @@ function getMessages(username, contact, callback) {
                     to: row.nome_to,
                     to_user: row.to_user,
                     message: row.message,
-                    hour: row.hour
+                    hour: row.hour,
+                    date: row.date
                 }));
                 callback(null, messages);
             });
