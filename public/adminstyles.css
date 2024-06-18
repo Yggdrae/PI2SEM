@@ -61,7 +61,7 @@ body {
 
 .admin-header {
     position: fixed;
-    top: 5px;
+    top: -5px;
     color: #333;
     margin: auto;
     margin-top: initial;
