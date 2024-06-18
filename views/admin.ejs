@@ -26,6 +26,13 @@
                 <div class="login-container">
                     <form action="/admin/cadastrar" method="POST">
                         <div class="input-group">
+                            <label for="isAdmin">Será admnistrador do sistema?</label>
+                            <select name="isAdmin" id="isAdmin">
+                                <option selected="selected" value="No">Não</option>
+                                <option value="Yes">Sim</option>
+                            </select>
+                        </div><br>
+                        <div class="input-group">
                             <label for="nomeSocialCad">Nome Social:</label>
                             <input type="text" id="nomeSocialCad" name="nomeSocialCad" required>
                         </div>
@@ -47,8 +54,20 @@
                     <form action="/admin/editar" method="POST">
                         <div class="input-group">
                             <label for="username">Username do usuário a ser editado:</label>
-                            <input type="text" id="username" name="username" required>
-                        </div>
+                            <select name="username" id="username">
+                                <option selected="selected"></option>
+                                <% contacts.forEach(contact => { %>
+                                    <option value="<%= contact.username %>"><%= contact.username %></option>
+                                <% }); %>
+                            </select>
+                        </div><br>
+                        <div class="input-group">
+                            <label for="isAdmin">Será administrador do sistema?</label>
+                            <select name="isAdmin" id="isAdmin">
+                                <option selected="selected" value="No">Não</option>
+                                <option value="Yes">Sim</option>
+                            </select>
+                        </div><br>
                         <div class="input-group">
                             <label for="nomeSocialEditar">Novo Nome Social:</label>
                             <input type="text" id="nomeSocialEditar" name="nomeSocialEditar">
@@ -72,8 +91,13 @@
                     <form action="/admin/excluir" method="POST">
                         <div class="input-group">
                             <label for="usernameExcluir">Nome de Usuário:</label>
-                            <input type="text" id="usernameExcluir" name="usernameExcluir" required>
-                        </div>
+                            <select name="usernameExcluir" id="usernameExcluir">
+                                <option selected="selected"></option>
+                                <% contacts.forEach(contact => { %>
+                                    <option value="<%= contact.username %>"><%= contact.username %></option>
+                                <% }); %>
+                            </select>
+                        </div><br><br>
                         <button class="login-button" type="submit">Confirmar</button>
                     </form>
                 </div>

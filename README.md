@@ -10,9 +10,6 @@
     Os Colaboradores
 </h2>
 
-### Kaike Maiante
-<img src="midia/readme/Kaike.png" alt="Kaike" style="width:100px;"/>
-
 ### Pietro Juan
 <img src="midia/readme/Pietro.png" alt="Pietro" style="width:100px;"/>
 
