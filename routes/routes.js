@@ -1,5 +1,5 @@
 const express = require('express');
-const { getContacts, getMessages, checkUsers, createUsers, updateUsers, deleteUsers } = require('../controllers/controller');
+const { getContacts, getMessages, checkUsers, checkUser, createUsers, updateUsers, deleteUsers } = require('../controllers/controller');
 const { dbUsers } = require('../models/model');
 const router = express.Router();
 
@@ -19,6 +19,7 @@ router.get('/', (req, res) => {
 // Autenticação do usuário
 router.post('/login', (req, res) => {
     const { username, password } = req.body;
+    console.log(req.body);
     dbUsers.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, row) => {
         if (err) {
             console.error(err.message);
@@ -33,10 +34,24 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/admin', isAuthenticated, (req, res) => {
-    if(req.session.username != 'admin'){
-        return res.status(404).send("Proibido");
-    }
-    res.render('admin');
+    const username = req.session.username;
+    checkUser(username, (err, userrow) => {
+        if(err){
+            console.error(err.message);
+        }
+        const isAdmin = userrow.isAdmin;
+        if(isAdmin != 'Yes'){
+            return res.status(403).send("Proibido");
+        }
+        else{
+            getContacts(username, (err, contacts) => {
+                if (err) {
+                    return res.status(500).send('Erro interno do servidor');
+                }
+                res.render('admin', { username: username, contacts: contacts });
+            });
+        };
+    })
 });
 
 // Rota para a tela de contatos
@@ -46,7 +61,13 @@ router.get('/contacts', isAuthenticated, (req, res) => {
         if (err) {
             return res.status(500).send('Erro interno do servidor');
         }
-        res.render('contacts', { username: username, contacts: contacts });
+        checkUser(username, (err, userrow) => {
+            if(err){
+                console.error(err.message);
+            }
+            const isAdmin = userrow.isAdmin;
+            res.render('contacts', { username: username, contacts: contacts, isAdmin: isAdmin });
+        });
     });
 });
 
@@ -59,8 +80,6 @@ router.get('/conversation/:contact', isAuthenticated, async (req, res) => {
         }
         const contactName = contact.nome_social;
         const contactUsername = contact.username;
-        console.log(contactName);
-        console.log(contactUsername);
         getMessages(username, req.params.contact, (err, messages) => {
             if (err) {
                 return res.status(500).send('Erro interno do servidor');
@@ -78,14 +97,14 @@ router.get('/logout', (req, res) => {
 
 // Rotas de administração
 router.post('/admin/cadastrar', isAuthenticated, (req, res) => {
-    const { usernameCad, nomeSocialCad, passwordCad } = req.body;
-    createUsers(usernameCad, nomeSocialCad, passwordCad);
+    const { isAdmin, usernameCad, nomeSocialCad, passwordCad } = req.body;
+    createUsers(usernameCad, nomeSocialCad, passwordCad, isAdmin);
     res.redirect('/contacts');
 });
 
 router.post('/admin/editar', isAuthenticated, (req, res) => {
-    const { username, nomeSocialEditar, usernameEditar, passwordEditar } = req.body;
-    updateUsers(username, nomeSocialEditar, usernameEditar, passwordEditar);
+    const { username, isAdmin, nomeSocialEditar, usernameEditar, passwordEditar } = req.body;
+    updateUsers(username, nomeSocialEditar, usernameEditar, passwordEditar, isAdmin);
     res.redirect('/contacts');
 });
 

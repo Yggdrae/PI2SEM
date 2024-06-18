@@ -75,8 +75,8 @@ function saveMessages(from, to, message, today, hour, ano, mes, dia, hora, min, 
 }
 
 // Função para cadastrar usuários novos no banco de dados
-function createUsers(username, nome_social, password) {
-    dbUsers.run('INSERT INTO users (username, nome_social, password) VALUES (?, ?, ?)', [username, nome_social, password], (err) => {
+function createUsers(username, nome_social, password, isAdmin) {
+    dbUsers.run('INSERT INTO users (username, nome_social, password, isAdmin) VALUES (?, ?, ?, ?)', [username, nome_social, password, isAdmin], (err) => {
         if(err) {
             console.error(err.message);
         }
@@ -84,9 +84,13 @@ function createUsers(username, nome_social, password) {
 }
 
 // Função para atualizar dados de usuários no banco de dados
-function updateUsers(username, nome_social, newUsername, password) {
+function updateUsers(username, nome_social, newUsername, password, isAdmin) {
     let query = 'UPDATE users SET ';
     let params = [];
+    if (isAdmin) {
+        query += 'isAdmin = ?, ';
+        params.push(isAdmin);
+    }
     if (nome_social) {
         query += 'nome_social = ?, ';
         params.push(nome_social);
@@ -121,6 +125,17 @@ function deleteUsers(username) {
 
 async function checkUsers(contact, callback) {
     dbUsers.get('SELECT * FROM users WHERE username = ?', [contact], (err, row) => {
+        if (err) {
+            console.error(err.message);
+            return callback(err, null);
+        }
+        const checkedUser = row;
+        callback(null, checkedUser);
+    });
+}
+
+async function checkUser(username, callback) {
+    dbUsers.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
         if (err) {
             console.error(err.message);
             return callback(err, null);
@@ -223,4 +238,4 @@ function checkIfNewer(username, contact, callback) {
     });
 }
 
-module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers, checkUsers, saveConnHistory, isLastConnectionMoreRecent, checkIfNewer };
+module.exports = { getContacts, getMessages, saveMessages, createUsers, updateUsers, deleteUsers, checkUsers, checkUser, saveConnHistory, isLastConnectionMoreRecent, checkIfNewer };
