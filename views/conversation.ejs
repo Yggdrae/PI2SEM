@@ -98,6 +98,14 @@
             document.getElementById('messageList').appendChild(item);
             document.getElementById('conversation-container').scrollTo(0, document.getElementById('conversation-container').scrollHeight);
         });
+
+        //Verificar se o usuário está conectado na sala
+        setInterval(() =>{
+            const username = '<%= username %>'
+            const contactUser = '<%= contact.username %>'
+            socket.emit("stillConn", {username, contactUser})
+        },1000)
+
     </script>
 </body>
 </html>

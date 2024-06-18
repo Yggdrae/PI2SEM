@@ -64,13 +64,13 @@ io.on('connection', (socket) => {
         const to = contact
         saveConnHistory(from, to, today, hour);
 
-        // Enviar ping ao servidor a cada 10 segundos
-        setInterval(() => {
+        // Verificar se ainda está conectado e salvar a conexão
+        socket.on('stillConn', () =>{
             const pingTime = DateTime.now();
             const pingToday = `${pingTime.toFormat('dd/MM/yyyy')}`;
             const pingHour = `${pingTime.toFormat('HH:mm:ss')}`;
             saveConnHistory(from, to, pingToday, pingHour);
-        }, 1000);
+        })
     });
 
     socket.on('chat message', (msg) => {
