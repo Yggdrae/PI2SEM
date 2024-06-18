@@ -1,6 +1,8 @@
 const { dbUsers } = require('../models/model');
 const { DateTime } = require('luxon');
 
+dbUsers.run( 'PRAGMA foreign_keys = ON;' );
+
 // Função para obter contatos do banco de dados
 function getContacts(username, callback) {
     dbUsers.all('SELECT username, nome_social FROM users WHERE username != ? ORDER BY username ASC', [username], (err, rows) => {
