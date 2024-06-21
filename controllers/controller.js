@@ -54,7 +54,7 @@ function getMessages(username, contact, callback) {
     });
 }
 
-function saveMessages(from, to, message, today, hour, ano, mes, dia, hora, min, seg) {
+function saveMessages(from, to, message, today, hour) {
     dbUsers.get('SELECT nome_social FROM users WHERE username = ?', [from], (err, row) => {
         if(err) {
             console.error(err.message);
@@ -67,7 +67,7 @@ function saveMessages(from, to, message, today, hour, ano, mes, dia, hora, min, 
             }
             const msg_to = row_b.nome_social;
 
-            dbUsers.get('INSERT INTO historico (message, from_user, to_user, date, hour, years, months, days, hours, minutes, seconds, nome_from, nome_to) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message, from, to, today, hour, ano, mes, dia, hora, min, seg, msg_from, msg_to], (err) => {
+            dbUsers.get('INSERT INTO historico (message, from_user, to_user, date, hour, nome_from, nome_to) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message, from, to, today, hour, msg_from, msg_to], (err) => {
                 if (err) {
                     console.error(err.message);
                 }

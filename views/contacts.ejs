@@ -63,7 +63,33 @@
                 document.getElementById(contato).append(br);
                 document.getElementById(contato).append(divNewMsg);
             }
+            //notifyMe(contato);
         })
+
+                // request permission on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!Notification) {
+                alert('Desktop notifications not available in your browser. Try Chromium.');
+                return;
+            }
+
+            if (Notification.permission !== 'granted')
+                Notification.requestPermission();
+        });
+
+
+        function notifyMe(contato) {
+            if (Notification.permission !== 'granted')
+            Notification.requestPermission();
+            else {
+                var notification = new Notification('Você tem nova(s) mensagem(ns)', {
+                    body: `Nova mensagem de ${contato}`,
+                });
+                notification.onclick = function() {
+                    window.open(`/conversation/${encodeURIComponent(contato)}`);
+                };
+            }
+        }
     </script>
 </body>
 </html>

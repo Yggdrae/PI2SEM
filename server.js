@@ -79,13 +79,7 @@ io.on('connection', (socket) => {
         const currentDate = DateTime.now();
         const today = `${currentDate.toFormat('dd/MM/yyyy')}`;
         const hour = `${currentDate.toFormat('HH:mm:ss')}`;
-        const ano = `${currentDate.toFormat('yyyy')}`;
-        const mes = `${currentDate.toFormat('MM')}`;
-        const dia = `${currentDate.toFormat('dd')}`;
-        const hora = `${currentDate.toFormat('HH')}`;
-        const min = `${currentDate.toFormat('mm')}`;
-        const seg = `${currentDate.toFormat('ss')}`;
-        saveMessages(from, to, message, today, hour, ano, mes, dia, hora, min, seg);
+        saveMessages(from, to, message, today, hour);
 
         checkUsers(from, (err, fromName) => {
             if (err) {
