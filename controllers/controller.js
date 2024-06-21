@@ -67,7 +67,7 @@ function saveMessages(from, to, message, today, hour) {
             }
             const msg_to = row_b.nome_social;
 
-            dbUsers.get('INSERT INTO historico (message, from_user, to_user, date, hour, nome_from, nome_to) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message, from, to, today, hour, msg_from, msg_to], (err) => {
+            dbUsers.get('INSERT INTO historico (message, from_user, to_user, date, hour, nome_from, nome_to) VALUES (?, ?, ?, ?, ?, ?, ?)', [message, from, to, today, hour, msg_from, msg_to], (err) => {
                 if (err) {
                     console.error(err.message);
                 }
